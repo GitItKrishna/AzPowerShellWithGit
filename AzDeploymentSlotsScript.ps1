@@ -18,3 +18,5 @@ $PropertiesObject = @{
 Set-AzResource -PropertyObject $PropertiesObject -ResourceGroupName $resourceGroupName `
 -ResourceType Microsoft.Web/sites/slots/sourcecontrols `
 -ResourceName $webAppName/staging/web  -ApiVersion 2018-02-01 -Force
+
+Switch-AzWebAppSlot -ResourceGroupName $resourceGroupName -Name $webAppName -SourceSlotName "staging" -DestinationSlotName "production"
