@@ -96,3 +96,93 @@ You can see the output as shown below. After you are logged in successfully, you
 14. Paste the url in the browser and you can see the webapp created.
 
 ![img_6.png](MyWebApp/Images/img_6.png)
+
+**Deployment Slots using Azure PowerShell:-**
+
+The deployment slot functionality in App Service is a powerful tool that enables you to preview, manage, test, and deploy your different development environments.
+```aiignore
+Connect-AzAccount
+$resourceGroupName="DemoResourceGroupNew"
+$AppServicePlanName="DemoAppServicePlanNew"
+$webAppName="DemoWebApp5999"
+
+Set-AzAppServicePlan -ResourceGroupName $resourceGroupName -Name $AppServicePlanName -Tier Standard
+
+New-AzWebAppSlot -ResourceGroupName $resourceGroupName -Name $webAppName -Slot "staging"
+
+$gitRepoUrl="https://github.com/GitItKrishna/AzPowerShellWithGit"
+
+$PropertiesObject = @{
+    repoUrl = $gitRepoUrl
+    branch = "main"
+    isManualIntegration = "true"
+}
+
+Set-AzResource -PropertyObject $PropertiesObject -ResourceGroupName $resourceGroupName `
+-ResourceType Microsoft.Web/sites/slots/sourcecontrols `
+-ResourceName $webAppName/staging/web  -ApiVersion 2018-02-01 -Force
+```
+
+```
+Here is a step-by-step explanation:  
+
+1. Connect to Azure Account:  
+Connect-AzAccount
+
+This command prompts you to log in to your Azure account.  
+
+2. Set Variables:  
+$resourceGroupName="DemoResourceGroupNew"
+$AppServicePlanName="DemoAppServicePlanNew"
+$webAppName="DemoWebApp5999"
+
+These variables store the resource group name, App Service Plan name, and Web App name for the Azure resources.  
+
+3. Upgrade App Service Plan:  
+Set-AzAppServicePlan -ResourceGroupName $resourceGroupName -Name $AppServicePlanName -Tier Standard
+
+This command upgrades the App Service Plan to the Standard tier, which is required for deployment slots.  
+
+4. Create Deployment Slot:  
+New-AzWebAppSlot -ResourceGroupName $resourceGroupName -Name $webAppName -Slot "staging"
+
+This command creates a new deployment slot named "staging" for the specified Web App.  
+
+5. Set GitHub Repository URL:  
+$gitRepoUrl="https://github.com/GitItKrishna/AzPowerShellWithGit"
+
+This variable stores the URL of the GitHub repository to be integrated with the deployment slot.  
+
+6. Configure Source Control for Deployment Slot:  
+$PropertiesObject = @{
+    repoUrl = $gitRepoUrl
+    branch = "main"
+    isManualIntegration = "true"
+}
+
+Set-AzResource -PropertyObject $PropertiesObject -ResourceGroupName $resourceGroupName `
+-ResourceType Microsoft.Web/sites/slots/sourcecontrols `
+-ResourceName $webAppName/staging/web  -ApiVersion 2018-02-01 -Force
+This block of code sets the source control configuration for the deployment slot, linking it to the specified GitHub repository and branch. The Set-AzResource command applies these settings to the deployment slot.
+```
+After running the above script, you can see the sequence of events in the terminal console.
+
+![img_9.png](MyWebApp/Images/img_9.png)
+![img_10.png](MyWebApp/Images/img_10.png)
+
+Now switch to azure portal and click on All Resources to see all the resources created .
+Select the web app and click on deployment slots to see the staging slot created.(Screenshot below)
+
+![img_11.png](MyWebApp/Images/img_11.png)
+
+You can see the staging slot created as shown.
+
+Select the staging slot and select the url next to default domain and open the new tab in the browser window.
+
+![img_12.png](MyWebApp/Images/img_12.png)
+
+You can see the staging slot website.(screenshot below)
+![img_13.png](MyWebApp/Images/img_13.png)
+
+
+
