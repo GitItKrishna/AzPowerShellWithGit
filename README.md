@@ -184,7 +184,7 @@ Select the staging slot and select the url next to default domain and open the n
 You can see the staging slot website.(screenshot below)
 ![img_13.png](MyWebApp/Images/img_13.png)
 
-Switching the Deployment Slot to Production:-
+**Switching the Deployment Slot to Production:-**
 ```aiignore
 Switch-AzWebAppSlot -ResourceGroupName $resourceGroupName -Name $webAppName -SourceSlotName "staging" -DestinationSlotName "production"
 ```
